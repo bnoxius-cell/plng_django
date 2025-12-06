@@ -132,7 +132,6 @@ const socket = new WebSocket(wsEndpoint);
 document.getElementById('message-form').addEventListener('submit', function(event){
   event.preventDefault();
   const message = document.getElementById('msg').value;
-  chatMessages.innerHTML = "";
   socket.send(
     JSON.stringify({
       'message': message,
