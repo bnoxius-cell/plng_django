@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-dc!8kw(a@!lu%2w26ztpp$9i6_6#$^+-m=k72$&3$*yjd%p^6)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "plng-django.onrender.com",
@@ -82,6 +82,9 @@ CHANNEL_LAYERS = {
     }
 }
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://plng-django.onrender.com",
+]
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
