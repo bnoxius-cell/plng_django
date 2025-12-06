@@ -126,7 +126,7 @@ function scrollToBottom() {
 scrollToBottom();
 
 const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
-const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/notification/{{room_name}}/`;
+const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/notification/{{ room_name|escapejs }}/`;
 const socket = new WebSocket(wsEndpoint);
 
 document.getElementById('message-form').addEventListener('submit', function(event){
@@ -141,25 +141,20 @@ document.getElementById('message-form').addEventListener('submit', function(even
   );
 });
 
-// Response from consumer on server
 socket.addEventListener("message", (event) => {
   const data = JSON.parse(event.data);
-  console.log("Full Data: ", data);
-  const messageData = data.message;
-  console.log("Message Data: ", messageData);
-  var sender = messageData.sender;
-  var message = messageData.message;
-  
-  // Empty message input field after message has been sent
-  if (sender == '{{user}}'){
-    document.getElementById('msg').value = '';
-  }
-  
-  // Here's where we append the message to the chatbox.
-  var messageList = document.getElementById('messageList');
-  
-  if (sender != '{{user}}') {
-    // Received message
+
+  console.log("RECEIVED:", data);
+
+  const sender = data.sender;
+  const message = data.message;
+
+  // Clear input immediately
+  document.getElementById("msg").value = "";
+
+  const messageList = document.getElementById("messageList");
+
+  if (sender !== "{{ user }}") {
     messageList.innerHTML += `
       <div class="message-wrapper message-received">
         <div class="message-content-wrapper">
@@ -172,7 +167,6 @@ socket.addEventListener("message", (event) => {
       </div>
     `;
   } else {
-    // Sent message
     messageList.innerHTML += `
       <div class="message-wrapper message-sent">
         <div class="message-content-wrapper">
@@ -184,9 +178,10 @@ socket.addEventListener("message", (event) => {
       </div>
     `;
   }
-  
+
   scrollToBottom();
 });
+
 
 socket.onopen = (event) => {
   console.log("WebSocket connection opened!");
